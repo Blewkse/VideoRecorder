@@ -14,27 +14,31 @@ const SingleSetting = () => {
 
 
     return(
-        <div className="rounded-2xl bg-violet-500 grid grid-cols-8 grid-rows-5 max-w-[15%] " onClick={handleClick}> 
-            <div className="col-start-2 col-span-4 justify-self-start">
-                <h1 className="font-mono text-black text-4xl">{title}</h1>
+
+        <div className="bg-violet-700 rounded-xl flex-col w-full pb-2">
+            <div className="flex mx-1/12 ">
+                <h1 className="text-xl text-white font-mono font-bold">{title}</h1>
             </div>
-            <div className="col-start-2 ">
-                <h3 className="font-mono text-white  text-xl italic ">Value</h3>
+            <div className="flex mx-1/6 align-top ">
+                <h3 className="font-mono text-white text-xs">Parameter</h3>
             </div>
-            <div className="col-start-2 col-span-2 row-start-3">
-                <input type={"checkbox"} className=" bg-slate-500 w-full h-full" />
+            <div className="flex mx-1/12">
+                <input className="h-5 w-5" type={"checkbox"}></input>
             </div>
-            <div className="col-start-5 col-span-4 row-start-3 row-span-2">
-                {activate?(
-                    <div className="bg-lime-400 rounded-full  w-full h-full"></div>
-                 ):<div className="bg-red-500 rounded-full  w-full h-full"></div>
-                }
+            <div className="flex justify-end mx-1/12">
+                <div className="bg-green-500 rounded-full w-5 h-5"></div>
             </div>
-            
-            
-            
-            
+
+
+
+
         </div>
+        
+            
+            
+            
+            
+       
     );
 }
 
