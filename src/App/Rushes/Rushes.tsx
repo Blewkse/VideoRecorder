@@ -3,10 +3,12 @@ import Rush from './Rush';
 
 function Rushes() {
   return (
-    <div className="flex bg-purple-500 border border-red-500 gap-4 flex-row  content-start sflex-grow">
-      <Rush />
-      <Rush />
-      <Rush />
+    <div className="flex flex-row align-middle">
+      <div className="flex bg-purple-500 gap-4 flex-row content-start ">
+        <Rush />
+        <Rush />
+        <Rush />
+      </div>
     </div>
   );
 }

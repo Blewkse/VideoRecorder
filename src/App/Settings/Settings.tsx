@@ -2,7 +2,7 @@ import SingleSetting from './SingleSetting';
 
 function Settings() {
   return (
-    <div className="flex bg-violet-500 flex-col w-40 content-start flex-shrink-0">
+    <div className="flex bg-violet-500 flex-col w-56 content-start flex-shrink-0">
       <div>
         <h1 className="font-mono text-3xl text-white font-extrabold pb-1/5 pt-2">SETTINGS</h1>
       </div>

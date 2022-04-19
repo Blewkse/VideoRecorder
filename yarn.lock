@@ -311,6 +311,11 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
+"@types/dom-mediacapture-record@^1.0.7":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@types/dom-mediacapture-record/-/dom-mediacapture-record-1.0.11.tgz#f61b17e6131d76629d4039b02634c7e786b82c3a"
+  integrity sha512-ODVOH95x08arZhbQOjH3no7Iye64akdO+55nM+IGtTzpu2ACKr9CQTrI//CCVieIjlI/eL+rK1hQjMycxIgylQ==
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -1409,6 +1414,15 @@ react-dom@^17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
+
+react-hook-recorder@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/react-hook-recorder/-/react-hook-recorder-0.0.9.tgz#8f50ac2dd97c442d8c2ec013e328d40aef051b0c"
+  integrity sha512-PGRUTrBhan9tH+kYExw4ym4MoFBV9QdlXTDNLN8wYS1k2D6j1oNQrodRhKtRqFD0NZZ2sRx1edqkv3YEpvazZQ==
+  dependencies:
+    "@types/dom-mediacapture-record" "^1.0.7"
+    react "^17.0.2"
+    react-dom "^17.0.2"
 
 react-refresh@^0.11.0:
   version "0.11.0"
