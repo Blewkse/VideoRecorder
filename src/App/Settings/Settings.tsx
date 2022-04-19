@@ -10,8 +10,8 @@ function Settings() {
         <div className="flex flex-col gap-4 items-center">
           <SingleSetting title="Luminosité" />
           <SingleSetting title="Son" />
-          <SingleSetting title="Regard"/>
-          <SingleSetting title="Flou"/>
+          <SingleSetting title="Regard" />
+          <SingleSetting title="Flou" />
         </div>
       </div>
     </div>
