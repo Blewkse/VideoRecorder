@@ -1,10 +1,8 @@
-import SingleSetting from './components/singleSetting';
-import Rush from './components/Rush';
+import Rush from './Rushes/Rush';
+import Setttings from './Settings';
 
 function App() {
   return (
-
-    
     <div className="flex bg-black border border-red-500 h-screen flex-row  ">
       <div className="flex bg-gray-800-800 border border-red-500 gap-4 flex-col flex-grow ">
         <div className="flex bg-green-500 border border-red-500 gap-4 flex-grow-0">
@@ -16,23 +14,8 @@ function App() {
           <Rush/>
         </div>
       </div>
-      <div className="flex bg-violet-500 flex-col w-40 content-start flex-shrink-0">
-        <div>
-        <h1 className='font-mono text-3xl text-white font-extrabold pb-1/5 pt-2'>SETTINGS</h1>
-        </div>
-        <div className='flex flex-col px-5'>
-          <div className='flex flex-col gap-4 items-center'>
-            <SingleSetting/>
-            <SingleSetting/>
-            <SingleSetting/>
-          </div>
-        </div>
-        
-        
-
-      </div>
+      <Setttings />
     </div> 
-   
   );
 
 }
