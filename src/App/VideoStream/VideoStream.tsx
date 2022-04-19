@@ -7,22 +7,31 @@ function VideoStream() {
   const onStop = useCallback((blob, blobUrl) => {
     setUrl(blobUrl);
   }, []);
-  function handleStartRecording() {
+
+  const onRead = useCallback(() => {
     console.log(status);
-    if (status !== 'recording') {
-      startRecording();
-      console.log('start');
-    } else {
-      stopRecording(onStop);
-      console.log('stop');
+    if (status !== 'init') {
+      if (status !== 'recording') {
+        console.log('recording');
+        startRecording();
+      } else {
+        console.log('stop');
+        stopRecording(onStop);
+      }
     }
-  }
+  }, [status]);
+
   return (
     <div className="flex flex-row bg-green-500 flex-grow gap-5 justify-center align-middle ">
-      <video className="w-4/7 py-4 " ref={register} autoPlay muted playsInline />
+      {console.log(status)}
+      <video className="w-4/7 py-4 " ref={register} autoPlay muted playsInline></video>
       <div
-        className=" bg-red-500 w-5 h-5 rounded-full z-50 self-end p-5 mb-8 absolute hover:cursor-pointer "
-        onClick={handleStartRecording}></div>
+        className="bg-red-500 w-40 h-40 rounded-full hover:cursor-pointer"
+        onClick={onRead}></div>
+      <div>
+        <strong>Status :</strong>&nbsp;
+        {status}
+      </div>
     </div>
   );
 }
