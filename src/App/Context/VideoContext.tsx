@@ -5,7 +5,7 @@ export const VideoContext = createContext<any>(null);
 const VideoContextProvider = (props: any) => {
   const [videoLinks, setVideoLinks] = useState<Array<string>>(['']);
 
-  const value = useMemo(() => ({ videoLinks, setVideoLinks }), [videoLinks, setVideoLinks]);
+  const value = useMemo(() => ({ videoLinks, addVideo, removeAll }), [videoLinks]);
 
   function addVideo(url: string) {
     setVideoLinks([...url]);
@@ -15,9 +15,7 @@ const VideoContextProvider = (props: any) => {
     setVideoLinks(['']);
   }
 
-  return (
-    <VideoContext.Provider value={{ videoLinks, addVideo, removeAll }}>
-      {props.children}
-    </VideoContext.Provider>
-  );
+  return <VideoContext.Provider value={value}>{props.children}</VideoContext.Provider>;
 };
+
+export default VideoContextProvider;
