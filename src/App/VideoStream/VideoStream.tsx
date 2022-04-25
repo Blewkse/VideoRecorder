@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import useRecorder from 'react-hook-recorder';
 import { VideoContext } from '../Context/VideoContext';
 
@@ -7,43 +7,29 @@ function VideoStream() {
   const [url, setUrl] = useState('');
   const onStop = useCallback((blob, blobUrl) => {
     setUrl(blobUrl);
+    console.log(blobUrl);
   }, []);
-  const { videoLinks, addVideo, removeAll } = userContext(VideoContext);
+  const { addVideo } = useContext(VideoContext);
 
   const onRead = useCallback(() => {
     console.log(status);
     if (status !== 'init') {
       if (status !== 'recording') {
-        console.log('recording');
         startRecording();
       } else {
-        console.log('stop');
-        stopRecording(onStop);
+        stopRecording(onStop)();
       }
     }
   }, [status]);
 
   return (
-    <div className="flex flex-row bg-green-500 flex-grow gap-5 justify-center align-middle ">
-      {console.log(status)}
-      <video className="w-4/7 py-4 " ref={register} autoPlay muted playsInline></video>
-      {status !== 'init' && (
-        <>
-          <button onClick={startRecording} disabled={status === 'recording'}>
-            Start Recording
-          </button>
-          <button
-            onClick={() => {
-              addVideo(), stopRecording(onStop);
-            }}
-            disabled={status !== 'recording'}>
-            Stop Recording
-          </button>
-        </>
-      )}
-      {/*<div
-        className="bg-red-500 w-40 h-40 rounded-full hover:cursor-pointer"
-        onClick={onRead}></div>*/}
+    <div className="flex flex-col bg-green-500 items-center ">
+      <video className="w-1/2 " ref={register} autoPlay muted playsInline></video>
+      <div className="bg-black flex flex-grow w-1/2 justify-center">
+        <div
+          className="bg-red-500 w-16 h-16 rounded-full hover:cursor-pointer z-50  "
+          onClick={onRead}></div>
+      </div>
       <div>
         <strong>Status :</strong>&nbsp;
         {status}
@@ -53,10 +39,3 @@ function VideoStream() {
 }
 
 export default VideoStream;
-function userContext(VideoContext: React.Context<any>): {
-  videoLinks: any;
-  addVideo: any;
-  removeAll: any;
-} {
-  throw new Error('Function not implemented.');
-}

@@ -1,8 +1,21 @@
 import React, { createContext, useMemo, useState } from 'react';
 
-export const VideoContext = createContext<any>(null);
+type ContextType = {
+  videoLinks: string[];
+  addVideo: (url: string) => void;
+  removeAll: () => void;
+};
+type Props = {
+  children: React.ReactNode;
+};
 
-const VideoContextProvider = (props: any) => {
+export const VideoContext = createContext<ContextType>({
+  videoLinks: [],
+  addVideo: (url: string) => {},
+  removeAll: () => {}
+});
+
+const VideoContextProvider = ({ children }: Props) => {
   const [videoLinks, setVideoLinks] = useState<Array<string>>(['']);
 
   const value = useMemo(() => ({ videoLinks, addVideo, removeAll }), [videoLinks]);
@@ -15,7 +28,7 @@ const VideoContextProvider = (props: any) => {
     setVideoLinks(['']);
   }
 
-  return <VideoContext.Provider value={value}>{props.children}</VideoContext.Provider>;
+  return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;
 };
 
 export default VideoContextProvider;
