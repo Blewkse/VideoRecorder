@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { VideoContext } from '../Context/VideoContext';
 
-const Rush = () => {
+type Props = {
+  link: string;
+};
+
+function Rush({ link }: Props) {
   return (
     <div className="flex h-36">
-      <img src="./brouillage.jpg"></img>
+      <video src={link} controls />
     </div>
   );
-};
+}
 
 export default Rush;
