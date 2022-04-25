@@ -7,7 +7,7 @@ type Props = {
 
 function Rush({ link }: Props) {
   return (
-    <div className="flex h-36">
+    <div className="flex h-36 flex-grow hover:cursor-wait">
       <video src={link} controls />
     </div>
   );

@@ -21,7 +21,7 @@ const VideoContextProvider = ({ children }: Props) => {
   const value = useMemo(() => ({ videoLinks, addVideo, removeAll }), [videoLinks]);
 
   function addVideo(url: string) {
-    setVideoLinks([...url]);
+    setVideoLinks([...videoLinks, url]);
   }
 
   function removeAll() {

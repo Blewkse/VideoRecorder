@@ -17,13 +17,14 @@ function VideoStream() {
       if (status !== 'recording') {
         startRecording();
       } else {
+        addVideo(url);
         stopRecording(onStop)();
       }
     }
   }, [status]);
 
   return (
-    <div className="flex flex-col bg-green-500 items-center ">
+    <div className="flex flex-col bg-slate-900 items-center ">
       <video className="w-1/2 " ref={register} autoPlay muted playsInline></video>
       <div className="bg-black flex flex-grow w-1/2 justify-center">
         <div

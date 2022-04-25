@@ -4,14 +4,13 @@ import Rush from './Rush';
 
 function Rushes() {
   const { videoLinks } = useContext(VideoContext);
-
+  console.log(videoLinks);
   return (
     <div className="flex flex-row align-middle">
       <div className="flex bg-purple-500 gap-4 flex-row content-start align-middle ">
         {videoLinks?.map((video: string) => (
-          <div>
+          <div key={video}>
             <Rush link={video} />
-            <p>{video}</p>
           </div>
         ))}
       </div>
