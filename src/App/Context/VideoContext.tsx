@@ -3,7 +3,8 @@ import React, { createContext, useCallback, useMemo, useState } from 'react';
 type ContextType = {
   videoLinks: string[];
   addVideo: (url: string) => void;
-  removeAll: () => void;
+  removeAllRushes: () => void;
+  removeRush: (index: number) => void;
 };
 type Props = {
   children: React.ReactNode;
@@ -11,8 +12,15 @@ type Props = {
 
 export const VideoContext = createContext<ContextType>({
   videoLinks: [],
-  addVideo: (url: string) => {},
-  removeAll: () => {}
+  addVideo: () => {
+    null;
+  },
+  removeAllRushes: () => {
+    null;
+  },
+  removeRush: () => {
+    null;
+  }
 });
 
 const VideoContextProvider = ({ children }: Props) => {
@@ -24,11 +32,25 @@ const VideoContextProvider = ({ children }: Props) => {
     },
     [videoLinks]
   );
-  function removeAll() {
+
+  function removeAllRushes() {
     setVideoLinks([]);
   }
 
-  const value = useMemo(() => ({ videoLinks, addVideo, removeAll }), [videoLinks]);
+  function removeRush(index: number) {
+    setVideoLinks(
+      videoLinks.filter((rush) => {
+        if (videoLinks.indexOf(rush) !== index) {
+          return rush;
+        }
+      })
+    );
+  }
+
+  const value = useMemo(
+    () => ({ videoLinks, addVideo, removeAllRushes, removeRush }),
+    [videoLinks]
+  );
 
   return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;
 };

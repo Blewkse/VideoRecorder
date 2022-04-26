@@ -1,7 +1,8 @@
-import VideoContextProvider, { VideoContext } from './Context/VideoContext';
+import VideoContextProvider from './Context/VideoContext';
 import Rushes from './Rushes';
 import Setttings from './Settings';
 import VideoStream from './VideoStream';
+import React from 'react';
 
 function App() {
   return (
