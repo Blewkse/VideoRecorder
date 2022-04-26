@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useMemo, useState } from 'react';
 
 type ContextType = {
   videoLinks: string[];
@@ -18,15 +18,17 @@ export const VideoContext = createContext<ContextType>({
 const VideoContextProvider = ({ children }: Props) => {
   const [videoLinks, setVideoLinks] = useState<Array<string>>([]);
 
-  const value = useMemo(() => ({ videoLinks, addVideo, removeAll }), [videoLinks]);
-
-  function addVideo(url: string) {
-    setVideoLinks([...videoLinks, url]);
-  }
-
+  const addVideo = useCallback(
+    (url: string) => {
+      setVideoLinks([...videoLinks, url]);
+    },
+    [videoLinks]
+  );
   function removeAll() {
     setVideoLinks([]);
   }
+
+  const value = useMemo(() => ({ videoLinks, addVideo, removeAll }), [videoLinks]);
 
   return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;
 };

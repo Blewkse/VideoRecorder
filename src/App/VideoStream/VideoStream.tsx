@@ -4,24 +4,23 @@ import { VideoContext } from '../Context/VideoContext';
 
 function VideoStream() {
   const { startRecording, stopRecording, register, status } = useRecorder();
-  const [url, setUrl] = useState('');
-  const onStop = useCallback((blob, blobUrl) => {
-    setUrl(blobUrl);
-  }, []);
   const { addVideo } = useContext(VideoContext);
 
-  const onRead = useCallback(() => {
-    if (status !== 'init') {
-      if (status !== 'recording') {
-        startRecording();
-      } else {
-        stopRecording(onStop)();
-        if (url != '') {
-          addVideo(url);
-        }
-      }
+  const onStop = useCallback(
+    (blob, blobUrl) => {
+      addVideo(blobUrl);
+    },
+    [addVideo]
+  );
+  const onClick = useCallback(() => {
+    if (status === 'init') {
+      return;
     }
-    console.log(status);
+    if (status !== 'recording') {
+      startRecording();
+      return;
+    }
+    stopRecording(onStop)();
   }, [status]);
 
   return (
@@ -30,7 +29,7 @@ function VideoStream() {
       <div className="bg-black flex flex-grow w-1/2 justify-center">
         <div
           className="bg-red-500 w-16 h-16 rounded-full hover:cursor-pointer z-50  "
-          onClick={onRead}></div>
+          onClick={onClick}></div>
       </div>
       <div>
         <strong>Status :</strong>&nbsp;
