@@ -9,7 +9,7 @@ type Props = {
 function Rush({ link, index }: Props) {
   const { removeRush } = useContext(VideoContext);
   return (
-    <div className="flex relative h-36 flex-grow flex-row bg-white">
+    <div className="flex relative h-36 flex-grow flex-row">
       <video src={link} controls />
       <div className="flex justify-center absolute -right-2 -top-2">
         <div

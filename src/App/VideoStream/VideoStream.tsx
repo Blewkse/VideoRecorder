@@ -27,13 +27,15 @@ function VideoStream() {
     <div className="flex flex-col bg-slate-900 items-center flex-shrink-0">
       <video className="w-1/2 " ref={register} autoPlay muted playsInline></video>
       <div className="bg-black flex flex-grow w-1/2 justify-center relative">
-        <div
-          className="bg-red-500 w-16 h-16 rounded-full absolute hover:cursor-pointer z-50  "
-          onClick={onClick}></div>
-      </div>
-      <div>
-        <strong>Status :</strong>&nbsp;
-        {status}
+        {status !== 'recording' ? (
+          <div
+            className="bg-red-500 w-14 h-14 rounded-full absolute hover:cursor-pointer z-50 bottom-4 border-2 border-white active:scale-75 transition duration-100"
+            onClick={onClick}></div>
+        ) : (
+          <div
+            className="bg-red-800 w-14 h-14 rounded-full absolute hover:cursor-pointer z-50 bottom-4 active:scale-75 transition duration-100 "
+            onClick={onClick}></div>
+        )}
       </div>
     </div>
   );

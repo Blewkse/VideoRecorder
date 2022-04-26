@@ -8,11 +8,9 @@ function App() {
   return (
     <div className="flex bg-black h-screen flex-row  ">
       <VideoContextProvider>
-        <div className="flex bg-purple-500 flex-col flex-grow ">
+        <div className="flex flex-col flex-grow ">
           <VideoStream />
-          <div>
-            <Rushes />
-          </div>
+          <Rushes />
         </div>
       </VideoContextProvider>
       <Setttings />

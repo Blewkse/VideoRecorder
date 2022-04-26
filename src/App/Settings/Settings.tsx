@@ -3,6 +3,7 @@ import Lightning from './Lightning';
 import SingleSetting from './SingleSetting';
 import Sound from './Sound';
 import View from './View';
+import React from 'react';
 
 function Settings() {
   return (

@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from 'react';
-import Lightning from './Lightning';
+import React from 'react';
 
 type Props = {
   title: string;

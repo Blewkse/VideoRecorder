@@ -10,7 +10,7 @@ function Rushes() {
 
   console.log(videoLinks);
   return (
-    <div className="flex bg-slate-800 gap-4 flex-row justify-between">
+    <div className="flex bg-slate-800 gap-4 flex-row justify-between flex-grow">
       {videoLinks.length > 0 ? (
         videoLinks?.map((video: string) => (
           <div key={video}>
