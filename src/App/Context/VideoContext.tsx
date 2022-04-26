@@ -25,7 +25,7 @@ const VideoContextProvider = ({ children }: Props) => {
   }
 
   function removeAll() {
-    setVideoLinks(['']);
+    setVideoLinks([]);
   }
 
   return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;
