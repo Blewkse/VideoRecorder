@@ -26,9 +26,9 @@ function VideoStream() {
   return (
     <div className="flex flex-col bg-slate-900 items-center flex-shrink-0">
       <video className="w-1/2 " ref={register} autoPlay muted playsInline></video>
-      <div className="bg-black flex flex-grow w-1/2 justify-center">
+      <div className="bg-black flex flex-grow w-1/2 justify-center relative">
         <div
-          className="bg-red-500 w-16 h-16 rounded-full hover:cursor-pointer z-50  "
+          className="bg-red-500 w-16 h-16 rounded-full absolute hover:cursor-pointer z-50  "
           onClick={onClick}></div>
       </div>
       <div>

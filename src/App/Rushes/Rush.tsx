@@ -9,11 +9,11 @@ type Props = {
 function Rush({ link, index }: Props) {
   const { removeRush } = useContext(VideoContext);
   return (
-    <div className="flex h-36 flex-grow flex-row bg-white">
+    <div className="flex relative h-36 flex-grow flex-row bg-white">
       <video src={link} controls />
-      <div className="flex justify-center bg-slate-700">
+      <div className="flex justify-center absolute -right-2 -top-2">
         <div
-          className="rounded-full bg-red-600 z-50 w-6 h-6 hover:cursor-pointer"
+          className="rounded-full bg-red-600 z-50 w-6 h-6  hover:cursor-pointer"
           onClick={() => {
             removeRush(index);
           }}>

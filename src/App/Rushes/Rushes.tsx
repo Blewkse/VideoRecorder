@@ -10,7 +10,7 @@ function Rushes() {
 
   console.log(videoLinks);
   return (
-    <div className="flex bg-slate-800 gap-4 flex-row content-start flex-shrink-0 max-h-60">
+    <div className="flex bg-slate-800 gap-4 flex-row justify-between">
       {videoLinks.length > 0 ? (
         videoLinks?.map((video: string) => (
           <div key={video}>
@@ -20,7 +20,9 @@ function Rushes() {
       ) : (
         <div>Aucun rush </div>
       )}
-      <Options />
+      <div className="flex h-1/5 ">
+        <Options />
+      </div>
     </div>
   );
 }
