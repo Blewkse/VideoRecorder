@@ -7,19 +7,21 @@ function VideoStream() {
   const [url, setUrl] = useState('');
   const onStop = useCallback((blob, blobUrl) => {
     setUrl(blobUrl);
-    addVideo(blobUrl);
   }, []);
   const { addVideo } = useContext(VideoContext);
 
   const onRead = useCallback(() => {
-    console.log(status);
     if (status !== 'init') {
       if (status !== 'recording') {
         startRecording();
       } else {
         stopRecording(onStop)();
+        if (url != '') {
+          addVideo(url);
+        }
       }
     }
+    console.log(status);
   }, [status]);
 
   return (

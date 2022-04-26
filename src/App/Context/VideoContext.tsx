@@ -16,7 +16,7 @@ export const VideoContext = createContext<ContextType>({
 });
 
 const VideoContextProvider = ({ children }: Props) => {
-  const [videoLinks, setVideoLinks] = useState<Array<string>>(['']);
+  const [videoLinks, setVideoLinks] = useState<Array<string>>([]);
 
   const value = useMemo(() => ({ videoLinks, addVideo, removeAll }), [videoLinks]);
 

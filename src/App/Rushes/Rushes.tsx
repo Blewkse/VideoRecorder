@@ -15,7 +15,7 @@ function Rushes() {
   return (
     <div className="flex flex-row align-middle">
       <div className="flex bg-purple-500 gap-4 flex-row content-start align-middle ">
-        {VideoLinksFree()}
+        {}
         {videoLinks.length > 0 ? (
           videoLinks?.map((video: string) => (
             <div key={video}>
