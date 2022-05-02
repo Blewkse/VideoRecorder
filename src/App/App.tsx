@@ -9,11 +9,13 @@ function App() {
     <div className="flex bg-black h-screen flex-row  ">
       <VideoContextProvider>
         <div className="flex flex-col flex-grow ">
-          <VideoStream />
+          <div className="flex flex-grow justify-center">
+            <VideoStream />
+          </div>
           <Rushes />
         </div>
+        <Setttings />
       </VideoContextProvider>
-      <Setttings />
     </div>
   );
 }

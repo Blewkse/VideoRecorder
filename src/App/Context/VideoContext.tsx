@@ -1,10 +1,25 @@
-import React, { createContext, useCallback, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useState } from 'react';
+import useRecorder from 'react-hook-recorder';
+
+type StopRecordingCallback = (blob: Blob, url: string) => void;
+
+export enum RecorderStatus {
+  'IDLE' = 'idle',
+  'INIT' = 'init',
+  'RECORDING' = 'recording',
+  'UNREGISTERED' = 'unregistered'
+}
 
 type ContextType = {
   videoLinks: string[];
   addVideo: (url: string) => void;
   removeAllRushes: () => void;
   removeRush: (index: number) => void;
+  startRecording: () => void;
+  stopRecording: (callback: StopRecordingCallback) => () => void;
+  register: (element: HTMLVideoElement) => void;
+  status: RecorderStatus;
+  stream: MediaStream;
 };
 type Props = {
   children: React.ReactNode;
@@ -20,7 +35,20 @@ export const VideoContext = createContext<ContextType>({
   },
   removeRush: () => {
     null;
-  }
+  },
+  startRecording: () => {
+    null;
+  },
+  stopRecording: () => {
+    return () => {
+      return;
+    };
+  },
+  register: () => {
+    null;
+  },
+  status: RecorderStatus.IDLE,
+  stream: new MediaStream()
 });
 
 const VideoContextProvider = ({ children }: Props) => {
@@ -47,10 +75,19 @@ const VideoContextProvider = ({ children }: Props) => {
     );
   }
 
-  const value = useMemo(
-    () => ({ videoLinks, addVideo, removeAllRushes, removeRush }),
-    [videoLinks]
-  );
+  const { startRecording, stopRecording, register, status, stream } = useRecorder();
+
+  const value = {
+    videoLinks,
+    addVideo,
+    removeAllRushes,
+    removeRush,
+    startRecording,
+    stopRecording,
+    register,
+    status,
+    stream: stream ?? new MediaStream()
+  };
 
   return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;
 };

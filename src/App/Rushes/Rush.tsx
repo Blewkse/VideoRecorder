@@ -11,7 +11,7 @@ function Rush({ link, index }: Props) {
   return (
     <div className="flex relative h-36 flex-grow flex-row">
       <video src={link} controls />
-      <div className="flex justify-center absolute -right-2 -top-2">
+      <div className="flex justify-center absolute -right-2 -top-2  sm:-right-0 sm:-top-0">
         <div
           className="rounded-full bg-red-600 z-50 w-6 h-6  hover:cursor-pointer"
           onClick={() => {

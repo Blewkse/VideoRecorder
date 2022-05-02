@@ -1,18 +1,18 @@
 import React, { useCallback, useContext } from 'react';
-import useRecorder from 'react-hook-recorder';
 import { VideoContext } from '../Context/VideoContext';
 
 function VideoStream() {
-  const { startRecording, stopRecording, register, status } = useRecorder();
-  const { addVideo } = useContext(VideoContext);
+  const { addVideo, startRecording, stopRecording, register, status } = useContext(VideoContext);
 
   const onStop = useCallback(
     (blob, blobUrl) => {
+      console.log('coucou');
       addVideo(blobUrl);
     },
     [addVideo]
   );
   const onClick = useCallback(() => {
+    console.log(status);
     if (status === 'init') {
       return;
     }
@@ -21,12 +21,12 @@ function VideoStream() {
       return;
     }
     stopRecording(onStop)();
-  }, [status]);
+  }, [status, stopRecording, onStop, startRecording]);
 
   return (
-    <div className="flex flex-col bg-slate-900 items-center flex-shrink-0">
-      <video className="w-1/2 " ref={register} autoPlay muted playsInline></video>
-      <div className="bg-black flex flex-grow w-1/2 justify-center relative">
+    <div className="flex flex-col bg-slate-900 items-center">
+      <video className="flex flex-grow" ref={register} autoPlay muted playsInline></video>
+      <div className="bg-black flex justify-center relative">
         {status !== 'recording' ? (
           <div
             className="bg-red-500 w-14 h-14 rounded-full absolute hover:cursor-pointer z-50 bottom-4 border-2 border-white active:scale-75 transition duration-100"
