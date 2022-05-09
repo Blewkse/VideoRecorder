@@ -1,11 +1,13 @@
+import React, { useContext } from 'react';
+import { VideoContext } from '../Context/VideoContext';
 import Blur from './Blur/Blur';
 import Lightning from './Lightning/Lightning';
 import SingleSetting from './SingleSetting';
 import Sound from './Sound/Sound';
 import View from './View/View';
-import React from 'react';
 
 function Settings() {
+  const { stream } = useContext(VideoContext);
   return (
     <div className="flex bg-violet-500 flex-col w-56 md:w-44 sm:w-32 content-start flex-shrink-0">
       <div className="border-b-2">
@@ -16,9 +18,11 @@ function Settings() {
           <SingleSetting title="Luminosité">
             <Lightning />
           </SingleSetting>
-          <SingleSetting title="Son">
-            <Sound />
-          </SingleSetting>
+          {stream && stream.active && (
+            <SingleSetting title="Son">
+              <Sound />
+            </SingleSetting>
+          )}
           <SingleSetting title="Regard">
             <View />
           </SingleSetting>
