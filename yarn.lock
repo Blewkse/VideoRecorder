@@ -311,6 +311,11 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
+"@types/audioworklet@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@types/audioworklet/-/audioworklet-0.0.27.tgz#e1a36bf637be14c09e37655dd9cdf1cfeb5f38b2"
+  integrity sha512-7A7vWMHIVXzXYt/5/AhwDD5Ho/ElhjDXHQowT3aa07BKpxyCQhSAUypg9t5+3Q6Q5UY6cFhGkSoTwf4HQRHQkA==
+
 "@types/dom-mediacapture-record@^1.0.7":
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/@types/dom-mediacapture-record/-/dom-mediacapture-record-1.0.11.tgz#f61b17e6131d76629d4039b02634c7e786b82c3a"

@@ -6,13 +6,11 @@ function VideoStream() {
 
   const onStop = useCallback(
     (blob, blobUrl) => {
-      console.log('coucou');
       addVideo(blobUrl);
     },
     [addVideo]
   );
   const onClick = useCallback(() => {
-    console.log(status);
     if (status === 'init') {
       return;
     }

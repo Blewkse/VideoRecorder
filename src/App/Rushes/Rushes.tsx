@@ -7,8 +7,6 @@ import Options from './Options';
 
 function Rushes() {
   const { videoLinks } = useContext(VideoContext);
-
-  console.log(videoLinks);
   return (
     <div className="flex bg-slate-800 gap-4 flex-row justify-between flex-shrink-0">
       {videoLinks.length > 0 ? (
