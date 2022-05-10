@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from 'react';
+import React, { createContext, createRef, useCallback, useRef, useState } from 'react';
 import useRecorder from 'react-hook-recorder';
 
 type StopRecordingCallback = (blob: Blob, url: string) => void;
@@ -20,6 +20,8 @@ type ContextType = {
   register: (element: HTMLVideoElement) => void;
   status: RecorderStatus;
   stream: MediaStream;
+  imageCanvas?: React.RefObject<HTMLCanvasElement | undefined>;
+  videoRef?: React.MutableRefObject<HTMLVideoElement | undefined>;
 };
 type Props = {
   children: React.ReactNode;
@@ -48,7 +50,9 @@ export const VideoContext = createContext<ContextType>({
     null;
   },
   status: RecorderStatus.IDLE,
-  stream: new MediaStream()
+  stream: new MediaStream(),
+  imageCanvas: undefined,
+  videoRef: undefined
 });
 
 const VideoContextProvider = ({ children }: Props) => {
@@ -77,6 +81,10 @@ const VideoContextProvider = ({ children }: Props) => {
 
   const { startRecording, stopRecording, register, status, stream } = useRecorder();
 
+  const videoID = null;
+  const imageCanvas = useRef<HTMLCanvasElement>();
+  const videoRef = useRef<HTMLVideoElement>();
+
   const value = {
     videoLinks,
     addVideo,
@@ -86,7 +94,10 @@ const VideoContextProvider = ({ children }: Props) => {
     stopRecording,
     register,
     status,
-    stream: stream ?? new MediaStream()
+    stream: stream ?? new MediaStream(),
+    videoID,
+    imageCanvas,
+    videoRef
   };
 
   return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;

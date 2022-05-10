@@ -11,7 +11,7 @@ const useSoundLevel = (stream: MediaStream) => {
         setLevel(data);
       };
     })();
-  }, []);
+  }, [stream]);
 
   return level;
 };
