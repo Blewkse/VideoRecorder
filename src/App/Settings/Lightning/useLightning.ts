@@ -1,21 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-function useLightning(videoID: HTMLVideoElement, imageCanvas: HTMLCanvasElement) {
-  const imageContext = imageCanvas.getContext('2d');
-  const [brightnessLevel, setBrightnessLevel] = useState<number>(0);
+type Props = {
+  videoRef?: HTMLVideoElement;
+  interval: number;
+};
 
-  init(videoID, imageCanvas);
+function useLightning({ videoRef, interval }: Props) {
+  const imageCanvas = document.createElement('canvas');
+
+  const imageContext = useRef(imageCanvas.getContext('2d')).current;
+
+  const [brightnessLevel, setBrightnessLevel] = useState<string>('');
+
+  const update = useCallback(() => {
+    imageContext &&
+      imageCanvas &&
+      videoRef &&
+      setBrightnessLevel(getBrightness(imageContext, videoRef, imageCanvas).toString());
+  }, [imageCanvas, imageContext, videoRef]);
+
   useEffect(() => {
     (async () => {
-      if (!imageContext) {
-        return;
-      }
-      setBrightnessLevel(await update(imageContext, imageCanvas, videoID));
+      setInterval(() => {
+        update();
+      }, interval);
+      return () => clearInterval();
     })();
-  }, [imageCanvas, imageContext, videoID]);
+  }, [interval, update]);
 
   return brightnessLevel;
 }
+
+function brightness(pixels: ImageData, adjustment: number) {
+  const d = pixels.data;
+  for (let i = 0; i < d.length; i += 4) {
+    d[i] += adjustment;
+    d[i + 1] += adjustment;
+    d[i + 2] += adjustment;
+  }
+  return pixels;
+}
+
 function average(imgData: ImageData) {
   const d = imgData.data;
   const rgb = { r: 0, g: 0, b: 0 };
@@ -31,25 +56,22 @@ function average(imgData: ImageData) {
 
   return rgb;
 }
-
-function init(videoID: HTMLVideoElement, imageCanvas: HTMLCanvasElement) {
-  imageCanvas.height = videoID.videoHeight;
-  imageCanvas.width = videoID.videoWidth;
-}
-
-async function update(
-  imageContext: CanvasRenderingContext2D,
-  imageCanvas: HTMLCanvasElement,
-  videoID: HTMLVideoElement
+function getBrightness(
+  imageContext?: CanvasRenderingContext2D | null | undefined,
+  videoRef?: HTMLVideoElement,
+  imageCanvas?: HTMLCanvasElement
 ) {
+  if (!imageContext || !videoRef || !imageCanvas) {
+    return 0;
+  }
   let data;
   const alpha = 0;
   imageContext.drawImage(
-    videoID,
+    videoRef,
     0,
     0,
-    videoID.videoWidth,
-    videoID.videoHeight,
+    videoRef.videoWidth,
+    videoRef.videoHeight,
     0,
     0,
     imageCanvas.width,
@@ -60,17 +82,12 @@ async function update(
   data = average(imageContext.getImageData(0, 0, imageCanvas.width, imageCanvas.height));
   const avgBrightness =
     Math.round(((0.2126 * data.r + 0.7152 * data.g + 0.0722 * data.b) / 255) * 100 * 100) / 100;
-  return avgBrightness;
-}
 
-function brightness(pixels: ImageData, adjustment: number) {
-  const d = pixels.data;
-  for (let i = 0; i < d.length; i += 4) {
-    d[i] += adjustment;
-    d[i + 1] += adjustment;
-    d[i + 2] += adjustment;
+  if (!avgBrightness) {
+    return 0;
   }
-  return pixels;
+
+  return avgBrightness;
 }
 
 export default useLightning;

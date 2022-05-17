@@ -8,6 +8,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tensorflow-models/body-pix": "^2.2.0",
+    "@tensorflow-models/coco-ssd": "^2.2.2",
+    "@tensorflow/tfjs-backend-cpu": "^3.17.0",
+    "@tensorflow/tfjs-backend-webgl": "^3.17.0",
+    "@tensorflow/tfjs-node-gpu": "^3.17.0",
     "autoprefixer": "^10.4.4",
     "eslint-plugin-react-hooks": "^4.5.0",
     "postcss": "^8.4.12",

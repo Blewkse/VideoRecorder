@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 import { VideoContext } from '../../Context/VideoContext';
 import useLightning from './useLightning';
+import useFacialPlacementWebcam from '../useFacialPlacementWebcam';
 
 function Lightning() {
-  const { videoRef, imageCanvas } = useContext(VideoContext);
+  const { videoRef } = useContext(VideoContext);
 
-  const value = useLightning(videoRef.current, imageCanvas.current);
+  const videoID = videoRef?.current;
+  const value = useLightning({ videoRef: videoID, interval: 1000 });
 
   return (
     <div className="flex mx-1/6 align-top ">
