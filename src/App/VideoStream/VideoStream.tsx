@@ -1,12 +1,12 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { VideoContext } from '../Context/VideoContext';
-import useVideoBlur from '../Settings/Blur/useVideoBlur';
+import useVideoBlur from './useVideoBlur';
 
 function VideoStream() {
-  const { addVideo, startRecording, stopRecording, register, status, videoRef } =
+  const { addVideo, startRecording, stopRecording, register, status, videoRef, isBlur } =
     useContext(VideoContext);
 
-  const canvas = useRef<HTMLCanvasElement>();
+  const imageCanvas = useRef<HTMLCanvasElement>(null);
 
   const onStop = useCallback(
     (blob, blobUrl) => {
@@ -30,15 +30,22 @@ function VideoStream() {
       if (!videoRef) {
         return;
       }
+
       videoRef.current = el;
       register(el);
     },
     [register, videoRef]
   );
 
+  useVideoBlur({
+    videoRef: videoRef?.current,
+    isBlur: isBlur,
+    imageCanvas: imageCanvas.current
+  });
   return (
     <div className="flex flex-col bg-slate-900 items-center">
-      <video className="flex flex-grow" ref={refVid} autoPlay muted playsInline id="video"></video>
+      {isBlur && <canvas className="flex flex-grow absolute z-40" ref={imageCanvas} />}
+      <video className="flex flex-grow " ref={refVid} autoPlay muted playsInline />
       <div className="bg-black flex justify-center relative">
         {status !== 'recording' ? (
           <div

@@ -18,9 +18,14 @@ type ContextType = {
   startRecording: () => void;
   stopRecording: (callback: StopRecordingCallback) => () => void;
   register: (element: HTMLVideoElement) => void;
+  unregister: () => void;
   status: RecorderStatus;
   stream: MediaStream;
   videoRef?: React.MutableRefObject<HTMLVideoElement | undefined>;
+  isBlur: boolean;
+  setIsBlur: React.Dispatch<React.SetStateAction<boolean>> | undefined;
+  videoRefBlur?: React.MutableRefObject<HTMLVideoElement | undefined>;
+  setVideoRefBlur: (newVideoRef: HTMLVideoElement) => void;
 };
 type Props = {
   children: React.ReactNode;
@@ -48,9 +53,18 @@ export const VideoContext = createContext<ContextType>({
   register: () => {
     null;
   },
+  unregister: () => {
+    null;
+  },
   status: RecorderStatus.IDLE,
   stream: new MediaStream(),
-  videoRef: undefined
+  videoRef: undefined,
+  isBlur: false,
+  setIsBlur: undefined,
+  videoRefBlur: undefined,
+  setVideoRefBlur: () => {
+    null;
+  }
 });
 
 const VideoContextProvider = ({ children }: Props) => {
@@ -77,11 +91,17 @@ const VideoContextProvider = ({ children }: Props) => {
     );
   }
 
-  const { startRecording, stopRecording, register, status, stream } = useRecorder();
+  function setVideoRefBlur(newVideoRef: HTMLVideoElement) {
+    videoRefBlur.current = newVideoRef;
+  }
+
+  const { startRecording, stopRecording, register, unregister, status, stream } = useRecorder();
 
   const videoID = null;
   const imageCanvas = useRef<HTMLCanvasElement>();
   const videoRef = useRef<HTMLVideoElement>();
+  const videoRefBlur = useRef<HTMLVideoElement>();
+  const [isBlur, setIsBlur] = useState(false);
 
   const value = {
     videoLinks,
@@ -91,11 +111,16 @@ const VideoContextProvider = ({ children }: Props) => {
     startRecording,
     stopRecording,
     register,
+    unregister,
     status,
     stream: stream ?? new MediaStream(),
     videoID,
     imageCanvas,
-    videoRef
+    videoRef,
+    isBlur,
+    setIsBlur,
+    videoRefBlur,
+    setVideoRefBlur
   };
 
   return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;

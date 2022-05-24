@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
 import { VideoContext } from '../Context/VideoContext';
-import Blur from './Blur/Blur';
+import BlurActivated from './Blur/BlurActivated';
+import BlurDisable from './Blur/BlurDisable';
+import Blur from './Blur/BlurDisable';
 import Lightning from './Lightning/Lightning';
 import SingleSetting from './SingleSetting';
 import Sound from './Sound/Sound';
 import View from './View/View';
 
 function Settings() {
-  const { stream, videoRef } = useContext(VideoContext);
+  const { stream, videoRef, isBlur } = useContext(VideoContext);
   return (
     <div className="flex bg-violet-500 flex-col w-56 md:w-44 sm:w-32 content-start flex-shrink-0">
       <div className="border-b-2">
@@ -28,9 +30,14 @@ function Settings() {
             <View />
           </SingleSetting>
 
-          {videoRef && (
+          {videoRef && isBlur && (
             <SingleSetting title="Flou">
-              <Blur />
+              <BlurActivated />
+            </SingleSetting>
+          )}
+          {videoRef && !isBlur && (
+            <SingleSetting title="Flou">
+              <BlurDisable />
             </SingleSetting>
           )}
         </div>
