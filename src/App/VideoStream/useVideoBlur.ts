@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs';
 import * as tf from '@tensorflow/tfjs-core';
@@ -6,19 +6,10 @@ import * as bodyPix from '@tensorflow-models/body-pix';
 type Props = {
   videoRef?: HTMLVideoElement;
   isBlur: boolean;
-  imageCanvas: HTMLCanvasElement | null;
+  imageCanvas?: HTMLCanvasElement;
 };
 
 function useVideoBlur({ videoRef, isBlur, imageCanvas }: Props) {
-  tf.setBackend('cpu');
-  const [segmentation, setSegmentation] = useState<bodyPix.SemanticPersonSegmentation>();
-  const [net, setNet] = useState<bodyPix.BodyPix>();
-  bodyPix
-    .load({ architecture: 'MobileNetV1', outputStride: 16, multiplier: 0.75, quantBytes: 2 })
-    .then(function (loadedBody) {
-      setNet(loadedBody);
-    });
-
   const initSize = useCallback(() => {
     if (!videoRef || !imageCanvas) {
       return;
@@ -27,33 +18,33 @@ function useVideoBlur({ videoRef, isBlur, imageCanvas }: Props) {
     videoRef.height = videoRef.videoHeight;
     imageCanvas.height = videoRef.videoHeight;
     imageCanvas.width = videoRef.videoWidth;
+    imageCanvas.style.left = videoRef.style.left;
+    // imageCanvas.style.right = videoRef.style.right;
+    imageCanvas.style.top = videoRef.style.top;
+    // imageCanvas.style.bottom = videoRef.style.bottom;
+    // console.log(videoRef.style.left);
+    // console.log(imageCanvas.style.left);
   }, [imageCanvas, videoRef]);
+  initSize();
 
-  useEffect(() => {
-    initSize();
-
-    if (!videoRef || !isBlur || !imageCanvas) {
-      return;
-    }
-
-    setInterval(() => {
-      const masking = async () => {
-        if (!net) {
+  const editing = useCallback(
+    async (net: bodyPix.BodyPix) => {
+      console.log('avant videoBlur');
+      setInterval(async () => {
+        if (!videoRef || !isBlur || !imageCanvas) {
+          console.log(imageCanvas);
+          clearInterval();
           return;
         }
-        const segments = await net.segmentPerson(videoRef);
-        setSegmentation(segments);
-      };
-
-      const editing = async () => {
+        const segmentation = await net.segmentPerson(videoRef);
         const backgroundBlurAmount = 6;
         const edgeBlurAmount = 2;
         const flipHorizontal = true;
-
         if (!segmentation) {
           return;
         }
-        console.log('ping');
+        console.log('ping 2');
+
         bodyPix.drawBokehEffect(
           imageCanvas,
           videoRef,
@@ -62,12 +53,25 @@ function useVideoBlur({ videoRef, isBlur, imageCanvas }: Props) {
           edgeBlurAmount,
           flipHorizontal
         );
-      };
+      }, 100);
+    },
+    [imageCanvas, isBlur, videoRef]
+  );
 
-      masking().catch(console.error);
-      editing();
-    }, 1000);
-  }, [imageCanvas, initSize, isBlur, net, segmentation, videoRef]);
+  const masking = useCallback(async () => {
+    if (!videoRef || !isBlur) {
+      return;
+    }
+    bodyPix
+      .load({ architecture: 'MobileNetV1', outputStride: 16, multiplier: 0.75, quantBytes: 2 })
+      .then((net) => editing(net));
+  }, [editing, isBlur, videoRef]);
+
+  useEffect(() => {
+    masking().catch(console.error);
+    console.log('ping useVideoblur');
+    return;
+  }, [masking, videoRef, imageCanvas, isBlur]);
 }
 
 export default useVideoBlur;
