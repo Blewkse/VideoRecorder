@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs';
 import * as tf from '@tensorflow/tfjs-core';
@@ -29,31 +29,28 @@ function useVideoBlur({ videoRef, isBlur, imageCanvas }: Props) {
 
   const editing = useCallback(
     async (net: bodyPix.BodyPix) => {
-      console.log('avant videoBlur');
-      setInterval(async () => {
-        if (!videoRef || !isBlur || !imageCanvas) {
-          console.log(imageCanvas);
-          clearInterval();
-          return;
-        }
-        const segmentation = await net.segmentPerson(videoRef);
-        const backgroundBlurAmount = 6;
-        const edgeBlurAmount = 2;
-        const flipHorizontal = true;
-        if (!segmentation) {
-          return;
-        }
-        console.log('ping 2');
+      if (!videoRef || !isBlur || !imageCanvas) {
+        console.log(isBlur);
+        console.log(imageCanvas);
+        return;
+      }
+      const segmentation = await net.segmentPerson(videoRef);
+      const backgroundBlurAmount = 6;
+      const edgeBlurAmount = 2;
+      const flipHorizontal = true;
+      if (!segmentation) {
+        return;
+      }
+      console.log('ping 2');
 
-        bodyPix.drawBokehEffect(
-          imageCanvas,
-          videoRef,
-          segmentation,
-          backgroundBlurAmount,
-          edgeBlurAmount,
-          flipHorizontal
-        );
-      }, 100);
+      bodyPix.drawBokehEffect(
+        imageCanvas,
+        videoRef,
+        segmentation,
+        backgroundBlurAmount,
+        edgeBlurAmount,
+        flipHorizontal
+      );
     },
     [imageCanvas, isBlur, videoRef]
   );
@@ -64,11 +61,17 @@ function useVideoBlur({ videoRef, isBlur, imageCanvas }: Props) {
     }
     bodyPix
       .load({ architecture: 'MobileNetV1', outputStride: 16, multiplier: 0.75, quantBytes: 2 })
-      .then((net) => editing(net));
+      .then((net) => {
+        const interval = setInterval(() => editing(net), 100);
+        if (!isBlur) {
+          clearInterval(interval);
+        }
+      });
   }, [editing, isBlur, videoRef]);
 
   useEffect(() => {
     masking().catch(console.error);
+
     console.log('ping useVideoblur');
     return;
   }, [masking, videoRef, imageCanvas, isBlur]);
