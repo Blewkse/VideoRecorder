@@ -24,8 +24,6 @@ type ContextType = {
   videoRef?: React.MutableRefObject<HTMLVideoElement | undefined>;
   isBlur: boolean;
   setIsBlur: React.Dispatch<React.SetStateAction<boolean>> | undefined;
-  videoRefBlur?: React.MutableRefObject<HTMLVideoElement | undefined>;
-  setVideoRefBlur: (newVideoRef: HTMLVideoElement) => void;
 };
 type Props = {
   children: React.ReactNode;
@@ -60,11 +58,7 @@ export const VideoContext = createContext<ContextType>({
   stream: new MediaStream(),
   videoRef: undefined,
   isBlur: false,
-  setIsBlur: undefined,
-  videoRefBlur: undefined,
-  setVideoRefBlur: () => {
-    null;
-  }
+  setIsBlur: undefined
 });
 
 const VideoContextProvider = ({ children }: Props) => {
@@ -91,16 +85,11 @@ const VideoContextProvider = ({ children }: Props) => {
     );
   }
 
-  function setVideoRefBlur(newVideoRef: HTMLVideoElement) {
-    videoRefBlur.current = newVideoRef;
-  }
-
   const { startRecording, stopRecording, register, unregister, status, stream } = useRecorder();
 
   const videoID = null;
   const imageCanvas = useRef<HTMLCanvasElement>();
   const videoRef = useRef<HTMLVideoElement>();
-  const videoRefBlur = useRef<HTMLVideoElement>();
   const [isBlur, setIsBlur] = useState(false);
 
   const value = {
@@ -118,9 +107,7 @@ const VideoContextProvider = ({ children }: Props) => {
     imageCanvas,
     videoRef,
     isBlur,
-    setIsBlur,
-    videoRefBlur,
-    setVideoRefBlur
+    setIsBlur
   };
 
   return <VideoContext.Provider value={value}>{children}</VideoContext.Provider>;

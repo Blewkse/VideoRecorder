@@ -1,80 +1,93 @@
 import { useCallback, useEffect, useRef } from 'react';
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs';
-import * as tf from '@tensorflow/tfjs-core';
 import * as bodyPix from '@tensorflow-models/body-pix';
+import Whammy from 'ts-whammy/src/libs';
+enum RecorderStatus {
+  'IDLE' = 'idle',
+  'INIT' = 'init',
+  'RECORDING' = 'recording',
+  'UNREGISTERED' = 'unregistered'
+}
+
 type Props = {
-  videoRef?: HTMLVideoElement;
-  isBlur: boolean;
+  videoRef: HTMLVideoElement;
   imageCanvas?: HTMLCanvasElement;
+  status: RecorderStatus;
 };
 
-function useVideoBlur({ videoRef, isBlur, imageCanvas }: Props) {
-  const initSize = useCallback(() => {
-    if (!videoRef || !imageCanvas) {
-      return;
-    }
-    videoRef.width = videoRef.videoWidth;
-    videoRef.height = videoRef.videoHeight;
-    imageCanvas.height = videoRef.videoHeight;
-    imageCanvas.width = videoRef.videoWidth;
-    imageCanvas.style.left = videoRef.style.left;
-    // imageCanvas.style.right = videoRef.style.right;
-    imageCanvas.style.top = videoRef.style.top;
-    // imageCanvas.style.bottom = videoRef.style.bottom;
-    // console.log(videoRef.style.left);
-    // console.log(imageCanvas.style.left);
-  }, [imageCanvas, videoRef]);
-  initSize();
+function useVideoBlur({ videoRef, imageCanvas, status }: Props) {
+  const bodyPixRef = useRef<bodyPix.BodyPix>();
+  const timer = useRef<NodeJS.Timer>();
+  const frames = useRef<Array<string>>(['']);
+  const blob = useRef<Blob | undefined | Uint8Array>();
 
-  const editing = useCallback(
-    async (net: bodyPix.BodyPix) => {
-      if (!videoRef || !isBlur || !imageCanvas) {
-        console.log(isBlur);
-        console.log(imageCanvas);
-        return;
-      }
-      const segmentation = await net.segmentPerson(videoRef);
-      const backgroundBlurAmount = 6;
-      const edgeBlurAmount = 2;
-      const flipHorizontal = true;
-      if (!segmentation) {
-        return;
-      }
-      console.log('ping 2');
-
-      bodyPix.drawBokehEffect(
-        imageCanvas,
-        videoRef,
-        segmentation,
-        backgroundBlurAmount,
-        edgeBlurAmount,
-        flipHorizontal
-      );
+  const initSize = useCallback(
+    (canvas: HTMLCanvasElement) => {
+      videoRef.width = videoRef.videoWidth;
+      videoRef.height = videoRef.videoHeight;
+      canvas.height = videoRef.videoHeight;
+      canvas.width = videoRef.videoWidth;
     },
-    [imageCanvas, isBlur, videoRef]
+    [videoRef]
   );
 
-  const masking = useCallback(async () => {
-    if (!videoRef || !isBlur) {
+  const process = useCallback(async () => {
+    const segmentation = await bodyPixRef.current?.segmentPerson(videoRef);
+
+    const backgroundBlurAmount = 6;
+    const edgeBlurAmount = 2;
+    const flipHorizontal = false;
+    if (!segmentation) {
       return;
     }
-    bodyPix
-      .load({ architecture: 'MobileNetV1', outputStride: 16, multiplier: 0.75, quantBytes: 2 })
-      .then((net) => {
-        const interval = setInterval(() => editing(net), 100);
-        if (!isBlur) {
-          clearInterval(interval);
-        }
-      });
-  }, [editing, isBlur, videoRef]);
+
+    const IC = imageCanvas as HTMLCanvasElement;
+    bodyPix.drawBokehEffect(
+      IC,
+      videoRef,
+      segmentation,
+      backgroundBlurAmount,
+      edgeBlurAmount,
+      flipHorizontal
+    );
+
+    if (status === 'recording') {
+      frames.current.push(IC?.toDataURL());
+      return;
+    }
+    if (frames.current.length === 1) {
+      blob.current = undefined;
+      return;
+    }
+
+    blob.current = Whammy.fromImageArray(frames.current.splice(1), 24);
+    console.log(blob.current);
+    frames.current = [''];
+  }, [imageCanvas, status, videoRef]);
 
   useEffect(() => {
-    masking().catch(console.error);
+    if (!imageCanvas) {
+      return;
+    }
 
-    console.log('ping useVideoblur');
-    return;
-  }, [masking, videoRef, imageCanvas, isBlur]);
+    (async () => {
+      bodyPixRef.current = await bodyPix.load({
+        architecture: 'MobileNetV1',
+        outputStride: 16,
+        multiplier: 0.75,
+        quantBytes: 2
+      });
+      initSize(imageCanvas);
+      timer.current = setInterval(() => {
+        process();
+      }, 50);
+    })();
+
+    return () => clearInterval(timer.current);
+  }, [videoRef, imageCanvas, initSize, process]);
+
+  return blob.current;
 }
 
 export default useVideoBlur;

@@ -1,29 +1,43 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { VideoContext } from '../Context/VideoContext';
-import useVideoBlur from './useVideoBlur';
+import BlurVideo from './BlurVideo';
 
 function VideoStream() {
-  const { addVideo, startRecording, stopRecording, register, status, videoRef, isBlur } =
+  const { addVideo, startRecording, stopRecording, register, videoRef, isBlur, status } =
     useContext(VideoContext);
 
-  const imageCanvas = useRef<HTMLCanvasElement>();
+  const [blobBlur, setBlobBlur] = useState<Blob | Uint8Array>();
 
-  const onStop = useCallback(
+  const onStopTrue = useCallback(
     (blob, blobUrl) => {
       addVideo(blobUrl);
     },
     [addVideo]
   );
+
+  const onStopFalse = useCallback((blob, blobUrl) => {
+    return null;
+  }, []);
   const onClick = useCallback(() => {
+    console.log(status);
     if (status === 'init') {
       return;
     }
+
     if (status !== 'recording') {
       startRecording();
       return;
+    } else {
+      if (isBlur) {
+        console.log(blobBlur);
+        // const blobBlubCast = blobBlur. as Blob;
+        // onStop(blobBlur, URL.createObjectURL(blobBlubCast));
+        stopRecording(onStopFalse)();
+        return;
+      }
+      stopRecording(onStopTrue)();
     }
-    stopRecording(onStop)();
-  }, [status, stopRecording, onStop, startRecording]);
+  }, [status, startRecording, isBlur, stopRecording, onStopTrue, blobBlur, onStopFalse]);
 
   const refVid = useCallback(
     (el: HTMLVideoElement) => {
@@ -37,24 +51,20 @@ function VideoStream() {
     [register, videoRef]
   );
 
-  const refCanvas = useCallback(
-    (el: HTMLCanvasElement) => {
-      isBlur ? (imageCanvas.current = el) : (imageCanvas.current = undefined);
-    },
-    [isBlur]
-  );
-
-  useVideoBlur({
-    videoRef: videoRef?.current,
-    isBlur: isBlur,
-    imageCanvas: imageCanvas?.current
-  });
-
-  console.log('ping videostream');
+  const onFinishBlurRecord = useCallback((blobUrl: Blob | Uint8Array | undefined) => {
+    console.log(blobUrl);
+    setBlobBlur(blobUrl);
+  }, []);
 
   return (
     <div className="flex flex-col bg-slate-900 items-center">
-      {isBlur && <canvas className="flex flex-grow z-30 absolute" ref={refCanvas} />}
+      {isBlur && videoRef?.current != null && (
+        <BlurVideo
+          video={videoRef.current}
+          status={status}
+          onFinishBlurRecord={() => onFinishBlurRecord(blobBlur)}
+        />
+      )}
       <video className="flex flex-grow " ref={refVid} autoPlay muted playsInline />
       <div className="bg-black flex justify-center relative">
         {status !== 'recording' ? (

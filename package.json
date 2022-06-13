@@ -5,35 +5,44 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint ./"
   },
   "dependencies": {
     "@tensorflow-models/body-pix": "^2.2.0",
     "@tensorflow-models/coco-ssd": "^2.2.2",
     "@tensorflow/tfjs-backend-cpu": "^3.17.0",
     "@tensorflow/tfjs-backend-webgl": "^3.17.0",
+    "@tensorflow/tfjs-converter": "^3.6.0",
+    "@tensorflow/tfjs-core": "^3.6.0",
     "@tensorflow/tfjs-node-gpu": "^3.17.0",
     "autoprefixer": "^10.4.4",
+    "axios": "^0.27.2",
+    "check-peer-dependencies": "^4.1.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
     "postcss": "^8.4.12",
-    "react": "^17.0.2",
+    "prettier": "^2.6.2",
+    "prettier-eslint": "^15.0.1",
+    "react": "17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-recorder": "^0.0.9",
-    "tailwindcss": "^3.0.23"
+    "seedrandom": "~2.4.3",
+    "tailwindcss": "^3.0.23",
+    "ts-whammy": "^1.1.0",
+    "webgazer": "^3.0.0",
+    "whammy": "^0.0.1"
   },
   "devDependencies": {
     "@types/audioworklet": "^0.0.27",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
-    "@typescript-eslint/eslint-plugin": "^5.21.0",
-    "@typescript-eslint/parser": "^5.21.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
     "@vitejs/plugin-react": "^1.0.7",
-    "eslint": "^8.13.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.29.4",
-    "prettier": "^2.6.2",
-    "prettier-eslint": "10.1.0",
     "typescript": "^3.9.3",
     "vite": "^2.9.0"
   },
@@ -51,5 +60,6 @@
   "bugs": {
     "url": "https://github.com/Blewkse/VideoRecorder/issues"
   },
+  "extends": "plugin:prettier/recommended",
   "homepage": "https://github.com/Blewkse/VideoRecorder#readme"
 }
